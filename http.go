@@ -1,3 +1,0 @@
-package chatgo
-
-// Say
