@@ -4,18 +4,20 @@ Copyright © 2023 Xavier X <xavier@xavierx.cn>
 package cmd
 
 import (
+	"bufio"
 	"fmt"
 	"github.com/spf13/cobra"
 	"github.com/xavierxcn/chatgo/chatgo"
 	"github.com/xavierxcn/chatgo/utils"
+	"os"
 )
 
 // sayCmd represents the say command
 var sayCmd = &cobra.Command{
-	Use:   "say",
+	Use:   "chat",
 	Short: "say something to chatgo",
 	Long: `say something to chatgo, for example:
-chatgo say
+chatgo chat
 you should set openai token first.
 For example:
 chatgo set <token>`,
@@ -42,11 +44,15 @@ chatgo set <token>`,
 		// 初始化一个robot
 		robot := chatgo.NewRobot().SetName("chatgo").SetToken(token)
 
+		reader := bufio.NewReader(os.Stdin)
 		// 循环读取用户输入
 		for {
-			var sentence string
 			fmt.Print("> ")
-			fmt.Scanln(&sentence)
+			// 读取一行输入
+			sentence, err := reader.ReadString('\n')
+			if err != nil {
+				panic(err)
+			}
 
 			// 机器人回复
 			fmt.Printf("Robot: %s\n", robot.Tell(sentence))
