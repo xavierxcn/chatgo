@@ -24,3 +24,6 @@ chatgo:
 
 
 ```
+
+## todo
+- [ ] stream chat
