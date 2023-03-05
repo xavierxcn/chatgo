@@ -60,6 +60,10 @@ chatgo set <token>`,
 				panic(err)
 			}
 
+			if sentence == "\n" {
+				continue
+			}
+
 			if sentence == "exit\n" {
 				filename := fmt.Sprintf(chatgo.HistoryPath, robot.Name(), robot.CreateAt.Format(time.RFC3339))
 				err := robot.Save(filename)
