@@ -67,3 +67,8 @@ func (r *Robot) tell() (*ChatResponse, error) {
 	}
 	return &result, nil
 }
+
+func (r *Robot) tellStream() (*ChatResponse, error) {
+
+	return nil, nil
+}

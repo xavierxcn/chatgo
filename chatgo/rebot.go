@@ -1,6 +1,7 @@
 package chatgo
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/xavierxcn/chatgo/utils"
 	"strings"
@@ -116,12 +117,12 @@ func (r *Robot) Save(path string) error {
 
 	defer f.Close()
 
-	for _, m := range r.messages {
-		_, err := f.WriteString(fmt.Sprintf("%s: %s", m.Role, m.Content))
-		if err != nil {
-			return err
-		}
+	message, err := json.Marshal(r.messages)
+	if err != nil {
+		return err
 	}
+
+	_, err = f.Write(message)
 
 	fmt.Println("history saved to", path)
 
