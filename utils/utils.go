@@ -60,3 +60,20 @@ func WriteFile(path string, content string) error {
 	path = expandPath(path)
 	return os.WriteFile(path, []byte(content), 0644)
 }
+
+func CreateAndOpenFile(path string) (*os.File, error) {
+	path = expandPath(path)
+	// Create all directories leading up to the file
+	err := os.MkdirAll(filepath.Dir(path), os.ModePerm)
+	if err != nil {
+		return nil, err
+	}
+
+	// Create the file
+	file, err := os.Create(path)
+	if err != nil {
+		return nil, err
+	}
+
+	return file, nil
+}

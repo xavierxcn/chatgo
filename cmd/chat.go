@@ -46,6 +46,10 @@ chatgo set <token>`,
 		// 初始化一个robot
 		robot := chatgo.NewRobot().SetName("chatgo").SetToken(token)
 
+		fmt.Println("init robot...")
+		robot.Init()
+		fmt.Println("init robot success.")
+
 		reader := bufio.NewReader(os.Stdin)
 		// 循环读取用户输入
 		for {

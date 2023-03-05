@@ -2,7 +2,7 @@ package chatgo
 
 import (
 	"fmt"
-	"os"
+	"github.com/xavierxcn/chatgo/utils"
 	"strings"
 	"time"
 )
@@ -25,6 +25,25 @@ type Robot struct {
 func NewRobot() *Robot {
 	return &Robot{
 		CreateAt: time.Now(),
+	}
+}
+
+// Init initializes the robot
+func (r *Robot) Init() {
+	if r.token == "" {
+		panic("token is empty")
+	}
+
+	r.messages = []*message{
+		{
+			Role:    "system",
+			Content: fmt.Sprintf("hello, you are %s, you are a helpful assistant. ", r.Name()),
+		},
+	}
+
+	_, err := r.tell()
+	if err != nil {
+		panic(err)
 	}
 }
 
@@ -88,9 +107,9 @@ func (r *Robot) Tell(sentence string) []string {
 }
 
 // Save saves the messages to file
-func (r *Robot) Save(filename string) error {
+func (r *Robot) Save(path string) error {
 	// 将messages保存到HistoryPath
-	f, err := os.Create(filename)
+	f, err := utils.CreateAndOpenFile(path)
 	if err != nil {
 		return err
 	}
@@ -104,7 +123,7 @@ func (r *Robot) Save(filename string) error {
 		}
 	}
 
-	fmt.Println("history saved to", filename)
+	fmt.Println("history saved to", path)
 
 	return nil
 }
