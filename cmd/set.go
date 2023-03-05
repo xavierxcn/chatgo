@@ -33,7 +33,7 @@ var setCmd = &cobra.Command{
 			panic(err)
 		}
 
-		fmt.Println("set openai token success.")
+		fmt.Printf("Token saved to %s\n", chatgo.TokenPath)
 	},
 }
 
