@@ -10,6 +10,7 @@ import (
 	"github.com/xavierxcn/chatgo/chatgo"
 	"github.com/xavierxcn/chatgo/utils"
 	"os"
+	"time"
 )
 
 // sayCmd represents the say command
@@ -39,6 +40,7 @@ chatgo set <token>`,
 
 		if token == "" {
 			fmt.Println("you should set openai token first.")
+			return
 		}
 
 		// 初始化一个robot
@@ -54,8 +56,25 @@ chatgo set <token>`,
 				panic(err)
 			}
 
+			if sentence == "exit\n" {
+				filename := fmt.Sprintf(chatgo.HistoryPath, robot.Name(), robot.CreateAt.Format(time.RFC3339))
+				err := robot.Save(filename)
+				if err != nil {
+					panic(err)
+				}
+				return
+			}
+
 			// 机器人回复
-			fmt.Printf("Robot: %s\n", robot.Tell(sentence))
+			answers := robot.Tell(sentence)
+			fmt.Println("chatgo: ")
+			for _, answer := range answers {
+				if answer != "" {
+					fmt.Println(answer)
+				}
+			}
+
+			fmt.Println("\n")
 		}
 
 	},

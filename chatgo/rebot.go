@@ -1,7 +1,10 @@
 package chatgo
 
 import (
+	"fmt"
+	"os"
 	"strings"
+	"time"
 )
 
 type message struct {
@@ -15,11 +18,14 @@ type Robot struct {
 	token    string
 	model    string
 	messages []*message
+	CreateAt time.Time `json:"create_at"`
 }
 
 // NewRobot creates a new robot
 func NewRobot() *Robot {
-	return &Robot{}
+	return &Robot{
+		CreateAt: time.Now(),
+	}
 }
 
 // SetName sets the robot name
@@ -56,7 +62,7 @@ func (r *Robot) GetModel() string {
 }
 
 // Tell tells the robot something
-func (r *Robot) Tell(sentence string) string {
+func (r *Robot) Tell(sentence string) []string {
 	r.messages = append(r.messages, &message{
 		Role:    "user",
 		Content: sentence,
@@ -68,7 +74,7 @@ func (r *Robot) Tell(sentence string) string {
 	}
 
 	if len(result.Choices) == 0 {
-		return "sorry, i don't know what to say."
+		return []string{"sorry, i don't know what to say."}
 	}
 
 	latestMessage := result.Choices[len(result.Choices)-1].Message
@@ -78,5 +84,27 @@ func (r *Robot) Tell(sentence string) string {
 		Content: latestMessage.Content,
 	})
 
-	return strings.TrimSpace(latestMessage.Content)
+	return strings.Split(latestMessage.Content, "\n")
+}
+
+// Save saves the messages to file
+func (r *Robot) Save(filename string) error {
+	// 将messages保存到HistoryPath
+	f, err := os.Create(filename)
+	if err != nil {
+		return err
+	}
+
+	defer f.Close()
+
+	for _, m := range r.messages {
+		_, err := f.WriteString(fmt.Sprintf("%s: %s", m.Role, m.Content))
+		if err != nil {
+			return err
+		}
+	}
+
+	fmt.Println("history saved to", filename)
+
+	return nil
 }
