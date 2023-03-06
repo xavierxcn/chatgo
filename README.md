@@ -13,7 +13,7 @@ $ chatgo set <your-token>
 # chat
 $ chatgo chat
 
-$ init robot...
+init robot...
 init robot success.
 > 你叫什么名字
 chatgo: 
