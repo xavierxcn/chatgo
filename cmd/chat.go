@@ -82,9 +82,8 @@ chatgo set <token>`,
 				}
 			}
 
-			fmt.Println("\n")
+			fmt.Println("")
 		}
-
 	},
 }
 
