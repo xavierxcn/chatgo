@@ -38,7 +38,7 @@ chatgo set <token>`,
 		}
 
 		if token == "" {
-			fmt.Println("you should set openai token first.")
+			fmt.Println("you should set openai token first. example: chatgo set <token>")
 			return
 		}
 
