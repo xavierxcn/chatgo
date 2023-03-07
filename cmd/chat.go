@@ -74,12 +74,13 @@ chatgo set <token>`,
 			}
 
 			// 机器人回复
-			answers := robot.Tell(sentence)
+			answers, err := robot.TellStream(sentence)
+			if err != nil {
+				panic(err)
+			}
 			fmt.Println("chatgo: ")
-			for _, answer := range answers {
-				if answer != "" {
-					fmt.Println(answer)
-				}
+			for answer := range answers {
+				fmt.Print(answer)
 			}
 
 			fmt.Println("")

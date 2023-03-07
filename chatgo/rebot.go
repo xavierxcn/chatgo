@@ -107,6 +107,42 @@ func (r *Robot) Tell(sentence string) []string {
 	return strings.Split(latestMessage.Content, "\n")
 }
 
+// TellStream tells the robot something and returns a stream
+func (r *Robot) TellStream(sentence string) (<-chan string, error) {
+	var err error
+
+	r.messages = append(r.messages, &message{
+		Role:    "user",
+		Content: sentence,
+	})
+
+	stream, err := r.tellStream()
+	if err != nil {
+		return nil, err
+	}
+
+	result := make(chan string)
+
+	go func() {
+		defer func() {
+			close(result)
+		}()
+		for {
+
+			rsp := <-stream
+			if rsp == nil {
+				break
+			}
+
+			for _, choice := range rsp.Choices {
+				result <- choice.Delta.Content
+			}
+		}
+	}()
+
+	return result, nil
+}
+
 // Save saves the messages to file
 func (r *Robot) Save(path string) error {
 	// 将messages保存到HistoryPath
