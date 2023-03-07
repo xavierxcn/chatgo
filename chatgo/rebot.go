@@ -3,9 +3,10 @@ package chatgo
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/xavierxcn/chatgo/utils"
 	"strings"
 	"time"
+
+	"github.com/xavierxcn/chatgo/utils"
 )
 
 type message struct {
@@ -54,6 +55,7 @@ func (r *Robot) SetName(name string) *Robot {
 	return r
 }
 
+// Name gets the robot name
 func (r *Robot) Name() string {
 	if r.name == "" {
 		return "default_robot"
@@ -151,7 +153,9 @@ func (r *Robot) Save(path string) error {
 		return err
 	}
 
-	defer f.Close()
+	defer func() {
+		_ = f.Close()
+	}()
 
 	message, err := json.Marshal(r.messages)
 	if err != nil {
@@ -159,6 +163,9 @@ func (r *Robot) Save(path string) error {
 	}
 
 	_, err = f.Write(message)
+	if err != nil {
+		return err
+	}
 
 	fmt.Println("history saved to", path)
 

@@ -4,8 +4,9 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"golang.org/x/net/http2"
 	"net/http"
+
+	"golang.org/x/net/http2"
 )
 
 // ChatResponse is the response body for chatgpt
@@ -29,6 +30,7 @@ type ChatResponse struct {
 	} `json:"choices"`
 }
 
+// ChatStreamResponse is the response body for chatgpt stream
 type ChatStreamResponse struct {
 	ID      string `json:"id"`
 	Object  string `json:"object"`
@@ -63,7 +65,7 @@ func (r *Robot) tell() (*ChatResponse, error) {
 		return nil, err
 	}
 
-	req, err := http.NewRequest("POST", charUrl, bytes.NewBuffer(data))
+	req, err := http.NewRequest("POST", charURL, bytes.NewBuffer(data))
 	if err != nil {
 		return nil, err
 	}
@@ -75,7 +77,10 @@ func (r *Robot) tell() (*ChatResponse, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer resp.Body.Close()
+
+	defer func() {
+		_ = resp.Body.Close()
+	}()
 
 	var result ChatResponse
 	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
@@ -96,7 +101,7 @@ func (r *Robot) tellStream() (<-chan *ChatStreamResponse, error) {
 		return nil, err
 	}
 
-	req, err := http.NewRequest("POST", charUrl, bytes.NewBuffer(data))
+	req, err := http.NewRequest("POST", charURL, bytes.NewBuffer(data))
 	if err != nil {
 		return nil, err
 	}

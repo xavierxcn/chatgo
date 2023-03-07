@@ -1,3 +1,4 @@
+// Package utils contains utility functions
 package utils
 
 import (
@@ -35,7 +36,10 @@ func CreateFile(path string) error {
 		return err
 	}
 
-	defer file.Close()
+	defer func() {
+		_ = file.Close()
+	}()
+
 	return nil
 }
 
@@ -47,7 +51,9 @@ func ReadFile(path string) (string, error) {
 		return "", err
 	}
 
-	defer f.Close()
+	defer func() {
+		_ = f.Close()
+	}()
 
 	scanner := bufio.NewScanner(f)
 	scanner.Scan()
@@ -61,6 +67,7 @@ func WriteFile(path string, content string) error {
 	return os.WriteFile(path, []byte(content), 0644)
 }
 
+// CreateAndOpenFile creates a file and returns a file pointer
 func CreateAndOpenFile(path string) (*os.File, error) {
 	path = expandPath(path)
 	// Create all directories leading up to the file

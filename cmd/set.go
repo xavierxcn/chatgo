@@ -1,10 +1,8 @@
-/*
-Copyright © 2023 Xavier X <xavier@xavierx.cn>
-*/
 package cmd
 
 import (
 	"fmt"
+
 	"github.com/spf13/cobra"
 	"github.com/xavierxcn/chatgo/chatgo"
 	"github.com/xavierxcn/chatgo/utils"

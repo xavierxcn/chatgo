@@ -1,16 +1,15 @@
-/*
-Copyright © 2023 Xavier X <xavier@xavierx.cn>
-*/
+// Package cmd implements the command-line interface for chatgo.
 package cmd
 
 import (
 	"bufio"
 	"fmt"
+	"os"
+	"time"
+
 	"github.com/spf13/cobra"
 	"github.com/xavierxcn/chatgo/chatgo"
 	"github.com/xavierxcn/chatgo/utils"
-	"os"
-	"time"
 )
 
 // sayCmd represents the say command
