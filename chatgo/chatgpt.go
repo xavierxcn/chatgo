@@ -124,7 +124,7 @@ func (r *Robot) tellStream() (<-chan *ChatStreamResponse, error) {
 		}()
 		for {
 			// 流式读取body
-			buffer := make([]byte, 1024)
+			buffer := make([]byte, 65535)
 			n, err := resp.Body.Read(buffer)
 			if err != nil {
 				break
@@ -135,10 +135,7 @@ func (r *Robot) tellStream() (<-chan *ChatStreamResponse, error) {
 				if len(m) != 0 {
 					rdata := &ChatStreamResponse{}
 					m = bytes.TrimSpace(m)
-					s := string(m)
-					fmt.Println(s)
 					if err := json.Unmarshal(m, rdata); err != nil {
-						fmt.Println("error:", err)
 						continue
 					}
 					stream <- rdata
