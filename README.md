@@ -27,6 +27,6 @@ chatgo:
 
 ## todo
 - [x] stream chat
-- [ ] 继续之前的聊天
+- [x] 继续之前的聊天
 - [ ] api接口
 - [ ] 前端页面
