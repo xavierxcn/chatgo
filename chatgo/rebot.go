@@ -38,7 +38,7 @@ func (r *Robot) Init() {
 
 	r.messages = []*message{
 		{
-			Role:    "system",
+			Role:    RoleSystem,
 			Content: fmt.Sprintf("hello, you are %s, you are a helpful assistant. ", r.Name()),
 		},
 	}
@@ -83,6 +83,34 @@ func (r *Robot) GetModel() string {
 	return r.model
 }
 
+// SetMessagesFromFile sets the robot messages
+func (r *Robot) SetMessagesFromFile(path string) *Robot {
+	m, err := utils.ReadFile(path)
+	if err != nil {
+		panic(err)
+	}
+
+	var messages []*message
+	err = json.Unmarshal([]byte(m), &messages)
+	if err != nil {
+		panic(err)
+	}
+
+	r.messages = messages
+	return r
+}
+
+// Replay 回放之前的聊天记录
+func (r *Robot) Replay() {
+	for _, m := range r.messages[1:] {
+		role := m.Role
+		if m.Role == RoleAssistant {
+			role = r.name
+		}
+		fmt.Printf("%s: %s\n", role, m.Content)
+	}
+}
+
 // Tell tells the robot something
 func (r *Robot) Tell(sentence string) []string {
 	r.messages = append(r.messages, &message{
@@ -114,8 +142,8 @@ func (r *Robot) TellStream(sentence string) (<-chan string, error) {
 	var err error
 
 	r.messages = append(r.messages, &message{
-		Role:    "user",
-		Content: sentence,
+		Role:    RoleUser,
+		Content: strings.TrimSpace(sentence),
 	})
 
 	stream, err := r.tellStream()
@@ -124,6 +152,11 @@ func (r *Robot) TellStream(sentence string) (<-chan string, error) {
 	}
 
 	result := make(chan string)
+
+	message := &message{
+		Role:    RoleAssistant,
+		Content: "",
+	}
 
 	go func() {
 		defer func() {
@@ -138,10 +171,12 @@ func (r *Robot) TellStream(sentence string) (<-chan string, error) {
 
 			for _, choice := range rsp.Choices {
 				result <- choice.Delta.Content
+				message.Content += choice.Delta.Content
 			}
 		}
 	}()
 
+	r.messages = append(r.messages, message)
 	return result, nil
 }
 

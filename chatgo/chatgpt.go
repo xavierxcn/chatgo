@@ -9,6 +9,15 @@ import (
 	"golang.org/x/net/http2"
 )
 
+const (
+	// RoleAssistant is the assistant role
+	RoleAssistant = "assistant"
+	// RoleUser is the user role
+	RoleUser = "user"
+	// RoleSystem is the system role
+	RoleSystem = "system"
+)
+
 // ChatResponse is the response body for chatgpt
 type ChatResponse struct {
 	ID      string `json:"id"`
