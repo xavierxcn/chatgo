@@ -2,9 +2,9 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/xavierxcn/chatgo/chatgo"
 
 	"github.com/spf13/cobra"
+	"github.com/xavierxcn/chatgo/chatgo"
 )
 
 // versionCmd represents the version command

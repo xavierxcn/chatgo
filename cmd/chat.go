@@ -42,12 +42,22 @@ chatgo set <token>`,
 			return
 		}
 
+		filePath := ""
+		if len(args) > 0 {
+			filePath = args[0]
+		}
+
 		// 初始化一个robot
 		robot := chatgo.NewRobot().SetName("chatgo").SetToken(token)
-
-		fmt.Println("init robot...")
-		robot.Init()
-		fmt.Println("init robot success.")
+		if filePath != "" {
+			fmt.Printf("load messages from %s\n", filePath)
+			robot = robot.SetMessagesFromFile(filePath)
+			robot.Replay()
+		} else {
+			fmt.Println("init robot...")
+			robot.Init()
+			fmt.Println("init robot success.")
+		}
 
 		reader := bufio.NewReader(os.Stdin)
 		// 循环读取用户输入
@@ -64,8 +74,15 @@ chatgo set <token>`,
 			}
 
 			if sentence == "exit\n" {
-				filename := fmt.Sprintf(chatgo.HistoryPath, robot.Name(), robot.CreateAt.Format(time.RFC3339))
-				err := robot.Save(filename)
+				// 保存聊天记录
+				var savePath string
+				defaultSavePath := fmt.Sprintf(chatgo.HistoryPath, robot.Name(), robot.CreateAt.Format(time.RFC3339))
+				fmt.Printf("save history to(default: %s): ", defaultSavePath)
+				_, _ = fmt.Scan(&savePath)
+				if savePath == "" {
+					savePath = defaultSavePath
+				}
+				err := robot.Save(savePath)
 				if err != nil {
 					panic(err)
 				}
