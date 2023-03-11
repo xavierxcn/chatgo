@@ -100,6 +100,10 @@ func (r *Robot) SetMessagesFromFile(path string) *Robot {
 	return r
 }
 
+func (r *Robot) GetMessages() []*message {
+	return r.messages
+}
+
 // Replay 回放之前的聊天记录
 func (r *Robot) Replay() {
 	for _, m := range r.messages[1:] {
