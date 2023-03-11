@@ -1,4 +1,7 @@
 # chatgo
+
+![chatgo release](https://github.com/xavierxcn/chatgo/actions/workflows/release.yaml/badge.svg?branch=main)
+
 chatgpt cmd tool
 
 ## Usage
