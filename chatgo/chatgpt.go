@@ -33,7 +33,7 @@ type ChatResponse struct {
 		Message struct {
 			Role    string `json:"role"`
 			Content string `json:"content"`
-		} `json:"message"`
+		} `json:"Message"`
 		FinishReason string `json:"finish_reason"`
 		Index        int    `json:"index"`
 	} `json:"choices"`

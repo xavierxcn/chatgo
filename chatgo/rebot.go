@@ -9,7 +9,8 @@ import (
 	"github.com/xavierxcn/chatgo/utils"
 )
 
-type message struct {
+// Message is a chat message
+type Message struct {
 	Role    string `json:"role"`
 	Content string `json:"content"`
 }
@@ -19,7 +20,7 @@ type Robot struct {
 	name     string
 	token    string
 	model    string
-	messages []*message
+	messages []*Message
 	CreateAt time.Time `json:"create_at"`
 }
 
@@ -36,7 +37,7 @@ func (r *Robot) Init() {
 		panic("token is empty")
 	}
 
-	r.messages = []*message{
+	r.messages = []*Message{
 		{
 			Role:    RoleSystem,
 			Content: fmt.Sprintf("hello, you are %s, you are a helpful assistant. ", r.Name()),
@@ -90,7 +91,7 @@ func (r *Robot) SetMessagesFromFile(path string) *Robot {
 		panic(err)
 	}
 
-	var messages []*message
+	var messages []*Message
 	err = json.Unmarshal([]byte(m), &messages)
 	if err != nil {
 		panic(err)
@@ -101,7 +102,7 @@ func (r *Robot) SetMessagesFromFile(path string) *Robot {
 }
 
 // GetMessages gets the robot messages
-func (r *Robot) GetMessages() []*message {
+func (r *Robot) GetMessages() []*Message {
 	return r.messages
 }
 
@@ -118,7 +119,7 @@ func (r *Robot) Replay() {
 
 // Tell tells the robot something
 func (r *Robot) Tell(sentence string) []string {
-	r.messages = append(r.messages, &message{
+	r.messages = append(r.messages, &Message{
 		Role:    "user",
 		Content: sentence,
 	})
@@ -134,7 +135,7 @@ func (r *Robot) Tell(sentence string) []string {
 
 	latestMessage := result.Choices[len(result.Choices)-1].Message
 
-	r.messages = append(r.messages, &message{
+	r.messages = append(r.messages, &Message{
 		Role:    latestMessage.Role,
 		Content: latestMessage.Content,
 	})
@@ -146,7 +147,7 @@ func (r *Robot) Tell(sentence string) []string {
 func (r *Robot) TellStream(sentence string) (<-chan string, error) {
 	var err error
 
-	r.messages = append(r.messages, &message{
+	r.messages = append(r.messages, &Message{
 		Role:    RoleUser,
 		Content: strings.TrimSpace(sentence),
 	})
@@ -158,7 +159,7 @@ func (r *Robot) TellStream(sentence string) (<-chan string, error) {
 
 	result := make(chan string)
 
-	message := &message{
+	message := &Message{
 		Role:    RoleAssistant,
 		Content: "",
 	}
