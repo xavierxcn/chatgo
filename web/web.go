@@ -3,6 +3,7 @@ package web
 
 import (
 	"fmt"
+	"net/http"
 	"os"
 	"strings"
 
@@ -27,7 +28,7 @@ func Boot() {
 	})
 
 	g.GET("/chatgo", func(c *gin.Context) {
-		c.HTML(200, "index.tmpl", gin.H{"name": "Chatgo"})
+		c.HTML(http.StatusOK, "index.tmpl", gin.H{"name": robot.Name()})
 	})
 
 	g.POST("/chatgo", func(c *gin.Context) {
@@ -43,7 +44,7 @@ func Boot() {
 			messages = append(messages, fmt.Sprintf("%s: %s", m.Role, m.Content))
 		}
 
-		c.HTML(200, "index.tmpl", gin.H{"name": "Chatgo", "messages": messages})
+		c.HTML(http.StatusOK, "index.tmpl", gin.H{"name": robot.Name(), "messages": messages})
 	})
 
 	fmt.Println("Web server started at :8080, press Ctrl+C to stop")
