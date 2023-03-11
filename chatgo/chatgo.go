@@ -14,4 +14,4 @@ const defaultModel = "gpt-3.5-turbo-0301"
 const charURL = "https://api.openai.com/v1/chat/completions"
 
 // Version is the version of chatgo
-const Version = "v0.1.1"
+const Version = "v0.2.0-alpha"
