@@ -12,15 +12,17 @@ jobs:
           go-version: "1.19.5" # 改成自己的版本
       - run: go test -v ./... # 测试代码
   lint:
-    - uses: actions/checkout@master # checkout 代码
-    - uses: actions/setup-go@v2 # 配置 Go 环境
-      with:
-        go-version: "1.19.5" # 改成自己的版本
-    - uses: golangci/golangci-lint-action@v3
-      with:
-        version: v1.50.1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master # checkout 代码
+      - uses: actions/setup-go@v2 # 配置 Go 环境
+        with:
+          go-version: "1.19.5" # 改成自己的版本
+      - uses: golangci/golangci-lint-action@v3
+        with:
+          version: v1.50.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   release:
     # 只有test完成时才会执行release
     needs: [ test, lint ]
