@@ -1,9 +1,11 @@
+// Package web provides the web server
 package web
 
 import (
 	"github.com/gin-gonic/gin"
 )
 
+// Boot starts the web server
 func Boot() {
 	g := gin.Default()
 
