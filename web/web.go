@@ -14,7 +14,6 @@ func Boot() {
 	g := gin.Default()
 
 	robot := chatgo.NewRobot().
-		SetToken("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").
 		SetName("Chatgo")
 
 	robot.Init()
@@ -31,8 +30,6 @@ func Boot() {
 
 	g.POST("/chatgo", func(c *gin.Context) {
 		sentence := c.PostForm("sentence")
-		fmt.Println(sentence)
-
 		sentence = strings.TrimSpace(sentence)
 
 		if sentence != "" {
