@@ -3,6 +3,7 @@ package web
 
 import (
 	"fmt"
+	"os"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -14,6 +15,7 @@ func Boot() {
 	g := gin.Default()
 
 	robot := chatgo.NewRobot().
+		SetToken(os.Getenv("OPENAI_TOKEN")).
 		SetName("Chatgo")
 
 	robot.Init()
