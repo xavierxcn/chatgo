@@ -7,23 +7,35 @@
           integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 </head>
 <body>
-<div class="container px-4 text-center">
+<div class="container px-4 center-v">
     <div class="row gx-5">
-        <div class="col">
+        <div class="col-auto">
             <div class="p-3"><h1 style="">Hello {{ .name }}</h1></div>
         </div>
     </div>
     <div class="row gx-5">
-        <div class="col">
-            <div class="p-3"><h1 style="">Hello {{ .name }}</h1></div>
-        </div>
-    </div>
-    <div class="row gx-5">
-        <div class="col">
+        <div class="col-auto">
             <div class="p-3">
-                <label>
-                    <input type="text">
-                </label>
+                <div id="chat">
+                    {{ range .messages }}
+                        <div>{{ . }}</div>
+                    {{ end }}
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="row gx-5">
+        <div class="col-auto">
+            <div class="p-3">
+                <form action="/chatgo" method="post">
+                    <div>chat:
+                        <label>
+                            <input type="text" name="sentence" id="sentence">
+                        </label>
+                        <button type="submit" class="btn btn-primary" id="send">send</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -33,4 +45,14 @@
         integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
         crossorigin="anonymous"></script>
 </body>
+
+<style>
+    .center-v {
+        position: absolute;
+        right: 50%;
+        top: 10%;
+        transform: translateY(-50%);
+    }
+
+</style>
 </html>
