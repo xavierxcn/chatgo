@@ -19,7 +19,7 @@ func Boot() {
 		SetToken(os.Getenv("OPENAI_TOKEN")).
 		SetName("Chatgo")
 
-	robot.Init()
+	go robot.Init()
 
 	g.LoadHTMLGlob("./web/templates/*.tmpl")
 
@@ -39,12 +39,7 @@ func Boot() {
 			robot.Tell(sentence)
 		}
 
-		var messages []string
-		for _, m := range robot.GetMessages() {
-			messages = append(messages, fmt.Sprintf("%s: %s", m.Role, m.Content))
-		}
-
-		c.HTML(http.StatusOK, "index.tmpl", gin.H{"name": robot.Name(), "messages": messages})
+		c.HTML(http.StatusOK, "index.tmpl", gin.H{"name": robot.Name(), "messages": robot.GetStringMessages()})
 	})
 
 	fmt.Println("Web server started at :8080, press Ctrl+C to stop")

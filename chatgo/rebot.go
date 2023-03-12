@@ -106,14 +106,23 @@ func (r *Robot) GetMessages() []*Message {
 	return r.messages
 }
 
-// Replay 回放之前的聊天记录
-func (r *Robot) Replay() {
+// GetStringMessages gets the robot messages
+func (r *Robot) GetStringMessages() []string {
+	var messages []string
 	for _, m := range r.messages[1:] {
 		role := m.Role
 		if m.Role == RoleAssistant {
 			role = r.name
 		}
-		fmt.Printf("%s: %s\n", role, m.Content)
+		messages = append(messages, fmt.Sprintf("%s: %s\n", role, m.Content))
+	}
+	return messages
+}
+
+// Replay 回放之前的聊天记录
+func (r *Robot) Replay() {
+	for _, m := range r.GetStringMessages() {
+		fmt.Println(m)
 	}
 }
 
