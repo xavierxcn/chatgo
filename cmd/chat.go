@@ -51,8 +51,13 @@ chatgo set <token>`,
 		robot := chatgo.NewRobot().SetName("chatgo").SetToken(token)
 		if filePath != "" {
 			fmt.Printf("load messages from %s\n", filePath)
-			robot = robot.SetMessagesFromFile(filePath)
-			robot.Replay()
+			if utils.IsFileExist(filePath) {
+				robot = robot.SetMessagesFromFile(filePath)
+				robot.Replay()
+			} else {
+				fmt.Println("file not exist, start an empty chat")
+			}
+
 		} else {
 			fmt.Println("init robot...")
 			robot.Init()
@@ -78,7 +83,7 @@ chatgo set <token>`,
 				var savePath string
 				defaultSavePath := fmt.Sprintf(chatgo.HistoryPath, robot.Name(), robot.CreateAt.Format(time.RFC3339))
 				fmt.Printf("save history to(default: %s): ", defaultSavePath)
-				_, _ = fmt.Scan(&savePath)
+				_, _ = fmt.Scanln(&savePath)
 				if savePath == "" {
 					savePath = defaultSavePath
 				}
